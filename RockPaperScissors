@@ -1,0 +1,159 @@
+import random 
+import typing
+import time
+
+turn_choices = ("rock", "paper", "scissors")
+game_duration = 3
+
+def player_vs_player():
+    game_over = False
+
+    playerone_score = 0
+    playertwo_score = 0
+
+    while game_over == False:
+        current_player = random.randint(0, 1)
+
+        playerone_turn = ""
+        playertwo_turn = ""
+
+        print()
+        if current_player == 0:
+            playerone_turn  = player_turn(0)
+            playertwo_turn = player_turn(1)
+        else:
+            playertwo_turn = player_turn(1)
+            playerone_turn = player_turn(0)
+        
+        # Determine who won
+        point_direction = determine_point(playerone_turn, playertwo_turn)
+
+        if point_direction == 0:
+            playerone_score += 1
+            if playerone_score >= game_duration:
+                print("\n----------------------")
+                print("Player one won!")
+                game_over = True
+                continue
+        elif point_direction == 1:
+            playertwo_score += 1
+            if playertwo_score >= game_duration:
+                print("\n----------------------")
+                print("Player two won!")
+                game_over = True
+                continue
+        
+        print("\nCurrent scores: ")
+        print(f"Player 1: {playerone_score}")
+        print(f"Player 2: {playertwo_score}")
+
+        if player_turn == 0:
+            player_turn = 1
+        else:
+            player_turn = 0
+
+def player_vs_computer():
+    game_over = False
+
+    playerone_score = 0
+    playertwo_score = 0
+
+    while game_over == False:
+        playerone_turn = ""
+        playertwo_turn = ""
+
+        print()
+        # The way it should work is that the player plays his turn, and this is stored in a variable, and then the computer plays his turn, and this is stored in a variable. Then they are compared.
+        
+        # What this code is doing here with the if statement is basically determining which player is to play first. Note that this alternates with each round.
+
+        # Player turn
+        playerone_turn = player_turn(0)
+
+        # computer turn - Generating a random number between 0 - 2, and determining the turn by this number.
+        print("Computer (player 2) choosing its turn...")
+        time.sleep(2)
+        playertwo_turn = turn_choices[random.randint(0, 2)]
+       
+        # Now we compare the 2 turns and see who won.
+        point_direction = determine_point(playerone_turn, playertwo_turn)
+
+        if point_direction == 0:
+            playerone_score += 1
+
+            # Check for win
+            if playerone_score >= game_duration:
+                game_over = True
+                print("\n----------------------")
+                print("Player 1 won!")
+                continue
+        elif point_direction == 1:
+            playertwo_score += 1
+            if playertwo_score >= game_duration:
+                game_over = True
+                print("\n----------------------")
+                print("Player 2 won!")
+                continue  # We continue to the next iteration of the loop (which won't actually loop since the condition is now not met, since we don't need to run the rest of the code)
+        
+        print("\nCurrent scores: ")
+        print(f"Player 1: {playerone_score}")
+        print(f"Player 2: {playertwo_score}")
+        
+
+def player_turn(player_num: int) -> str:
+    turn = ""
+    while True:
+        turn = input(f"Player {str(player_num + 1)}: 'Rock', 'Paper', 'Scissors': ").lower()
+
+        if turn != "rock" and turn != "paper" and turn != "scissors":
+            print("Invalid input! Please enter 'rock', 'paper', or 'scissors'!")
+        else:
+            break # Breaks out of the infinite loop if the input is valid.
+    
+    return turn
+
+
+def determine_point(playerone_turn: str, playertwo_turn: str):
+    print()
+    print(f"Player one: {playerone_turn}")
+    print(f"Player two: {playertwo_turn}")
+
+    # cases where player one wins.
+    if (playerone_turn == "rock" and playertwo_turn == "scissors") or (playerone_turn == "scissors" and playertwo_turn == "paper") or (playerone_turn == "paper" and playertwo_turn == "rock"):
+        print("Player 1 wins the round!")
+        return 0 # Returns player with index 0 as the one who is gaining a point.
+
+    if playerone_turn == playertwo_turn:
+        print("Tie!")
+        return -1
+    
+    print("Player 2 wins the round!")
+    return 1 # If player with index 0 didn't win a point, then it has to be that player with index 0 gained a point.
+
+
+quit = False
+while quit == False:
+    print("ROCK PAPER SCISSORS")
+    print("\n---------------------------------------------------------------")
+    print("Enter 1. = Play vs player")
+    print("Enter 2. = Play vs computer")
+    print("Enter 3. = Configure game duration (first up to 'x' wins)")
+    print("Enter 4. = Exit program")
+    choice = int(input("Please enter your choice: "))
+
+    match choice:
+        case 1:
+            player_vs_player()
+            break
+        case 2:
+            player_vs_computer()
+            break
+        case 3:
+            game_duration = int(input("Please enter the amount of points a player has to get to win: "))
+        case 4:
+            print("You succesfully quit!")
+            break
+        case _: 
+            print("Invalid input! Please enter a value between 1 and 3.")
+            break
+
