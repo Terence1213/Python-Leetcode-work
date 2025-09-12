@@ -60,7 +60,7 @@ unique_emails = set(emails)
 tutorial_teachers = {"Terence", "Adam", "Ylenia"}
 lecturer_teachers = {"Neil", "Terence", "Dale"}
 
-flexible_teachers = tutorial_teachers & lecturer_teachers
+flexible_teachers = tutorial_teachers & lecturer_teachers # Gets common elements between the 2 sets
 print(flexible_teachers)
 
 just_tutorial_teachers = tutorial_teachers - flexible_teachers 
